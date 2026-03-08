@@ -1,0 +1,28 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment / virtualenv
+venv/
+env/
+*.env
+
+# Logs
+*.log
+
+# Django static & media
+/staticfiles/
+media/
+
+# IDEs / editors
+.vscode/
+.idea/
+
+# Database (PostgreSQL ne crée pas de fichier local, donc pas nécessaire)
+# *.sqlite3  <-- supprimé
+
+# Coverage reports, pytest, etc.
+.coverage
+htmlcov/
