@@ -1,28 +1,37 @@
 # Python cache
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
 
-# Environment / virtualenv
+# Virtual environments
 venv/
 env/
-*.env
+.venv/
+
+# Environment variables
+.env
+.env.*
 
 # Logs
 *.log
 
-# Django static & media
-/staticfiles/
+# Django
+staticfiles/
 media/
 
-# IDEs / editors
+# IDE
 .vscode/
 .idea/
 
-# Database (PostgreSQL ne crée pas de fichier local, donc pas nécessaire)
-# *.sqlite3  <-- supprimé
+# OS
+.DS_Store
+Thumbs.db
 
-# Coverage reports, pytest, etc.
+# Coverage / tests
 .coverage
 htmlcov/
+
+# Python packaging
+build/
+dist/
+*.egg-info/

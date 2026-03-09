@@ -2,7 +2,7 @@ from django.urls import path
 from .views import signup_view,CustomLoginView,CustomLogoutView,activate_account,email_sent_view
 from django.contrib.auth import views as auth_views
 
-
+ 
 urlpatterns = [
     path("signup/", signup_view, name="signup"),
     path("login/", CustomLoginView.as_view(), name="login"),
