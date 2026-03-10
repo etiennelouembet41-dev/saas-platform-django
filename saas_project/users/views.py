@@ -9,6 +9,7 @@ from django.utils.encoding import force_bytes,force_str
 from django.core.mail import EmailMessage
 from django.contrib.auth.tokens import default_token_generator
 from users.models import User #modèle user personnalisé
+from django.contrib.auth.decorators import permission_required
 
 # Create your views here.
 def signup_view(request):
