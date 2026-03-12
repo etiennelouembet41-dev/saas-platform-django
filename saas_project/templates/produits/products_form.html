@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>
+        
+        {% if form.instance.id %}
+            Modifier le Produit
+        {% else %}
+            Ajouter Le Produit
+        {% endif %} 
+            
+    </h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+
+        
+        <button class="btn btn-success">
+
+            
+            {% if form.instance.id %}
+                Mettre à jour
+            {% else %}
+                Enregistrer
+            {% endif %} 
+                
+        </button>
+    </form>
+{% endblock %}

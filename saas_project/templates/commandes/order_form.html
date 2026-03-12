@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+        
+<h2>
+
+    
+    {% if form.instance.id %}
+        Modifier une Commande
+    {% else %}
+        Ajouter une commande    
+    {% endif %}
+        
+</h2>
+
+<form method="post">
+
+    {% csrf_token %}
+    {{form.as_p}}
+
+    {{ formset.management_form }}
+    {% for item_form in formset %}
+        {{ item_form.as_p }}
+    {% endfor %}
+    <button class="btn btn-success">
+            
+            {% if form.instance.id %}
+                Mettre à jour
+            {% else %}
+                Enregistrer
+            {% endif %}
+                
+    </button>
+</form>
+{% endblock %}

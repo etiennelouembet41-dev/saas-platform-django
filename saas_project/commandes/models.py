@@ -29,10 +29,10 @@ class Order(models.Model):
     )
     
     total=models.DecimalField(
-        max_digits=20,
+        max_digits=20, 
         decimal_places=2,
         default=0
-    )
+    ) 
     
     def __str__(self):
         return f"Order{self.id}"
@@ -45,6 +45,10 @@ class Order(models.Model):
         )
         self.total=total
         self.save()
+        
+    @property #pour permettre à ce qu'on l'ajoute dans le template
+    def total_quantity(self):
+        return sum(item.quantity for item in self.items.all()) 
     
 class OrderItem(models.Model):
     order=models.ForeignKey(
@@ -80,3 +84,5 @@ class Invoice(models.Model): #pour la facture
         max_digits=20,
         decimal_places=2
     )
+    
+    

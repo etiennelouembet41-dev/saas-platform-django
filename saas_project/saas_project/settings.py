@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     'dashboard',
     'produits',
     'users',
-    'drf_yasg',
+    'drf_yasg', #concenrnat le swagger 
 ]
 
 MIDDLEWARE = [
