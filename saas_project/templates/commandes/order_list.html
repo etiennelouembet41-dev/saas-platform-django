@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Commandes</h2>
+
+    <a class="btn btn-sm btn-primary" 
+        href="{% url 'order_create' %}">
+        Ajouter une commande
+    </a>
+
+    <table class=" table table-striped">
+        <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>client</th>
+                    <th>statuts</th>
+                    <th>total</th>
+                    <th>Quantité</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+        </thead>
+
+        <tbody>
+
+                
+                {% for order in orders  %}
+                    <tr>
+    
+                        <td>{{order.id}}</td>
+                        <td>{{order.client}}</td>
+                        <td>{{order.statuts}}</td>
+                        <td>{{order.total}}</td>
+                        <td>{{ order.total_quantity }}</td>
+                        <td>{{order.created_at}}</td>
+                        <td>
+
+                            <a class="btn btn-sm btn-warning" 
+                                href="{% url 'order_edit' order.id %}">
+                                Edit
+                            </a>
+
+                            <a class="btn btn-sm btn-danger" 
+                                href="{% url 'order_delete' order.id %}">
+                                Delete
+                            </a>
+
+                        </td>
+                        
+                    </tr>
+                {% endfor %}
+                    
+        </tbody>
+
+    </table>
+{% endblock  %}
