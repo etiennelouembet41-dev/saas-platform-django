@@ -1,34 +1,71 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
-</head>
+{% extends 'base.html' %}
 
-<body>
+{% block content %}
+    <h2>Dashboard</h2>
 
-<h1>Dashboard</h1>
+    <div class="row">
 
-<p>Bienvenue {{ request.user.username }}</p>
+        <div class="col-md-3">
 
-<hr>
+            <div class="card text-center">
 
-<h3>Statistiques</h3>
+                <div class="card-body">
+                    <h5>Clients</h5>
 
-<ul>
-    <li>Total clients : {{ total_clients }}</li>
-    <li>Total produits : {{ total_produits }}</li>
-    <li>Total commandes : {{ total_commandes }}</li>
-</ul>
+                    <h3>{{clients_count}}</h3>
+                </div>
 
-<hr>
+            </div>
 
-<form method="post" action="{% url 'logout' %}">
-    {% csrf_token %}
+        </div>
 
-    <button type="submit">
-        Logout
-    </button>
-</form>
 
-</body>
-</html>
+        <div class="col-md-3">
+
+            <div class="card text-center">
+
+                <div class="card-body">
+                    <h5>Produits</h5>
+
+                    <h3>{{products_count}}</h3>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card text-center">
+
+                <div class="card-body">
+                    <h5>Commandes</h5>
+
+                    <h3>{{orders_count}}</h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card text-center">
+
+                <div class="card-body">
+                    <h5>Revenue</h5>
+
+                    <h3>{{total_revenue}}</h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock  %}
