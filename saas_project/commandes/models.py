@@ -72,3 +72,8 @@ class OrderItem(models.Model):
     def get_total(self):
         return self.quantity * self.price
     
+<<<<<<< HEAD
+=======
+
+    
+>>>>>>> 060a974 (Pages CRUD(factures), Boostrap responsive)

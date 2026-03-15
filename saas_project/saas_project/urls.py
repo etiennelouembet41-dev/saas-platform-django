@@ -50,8 +50,7 @@ urlpatterns = [
     path("commandes/", include("commandes.urls")),
     path('accounts/login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path("factures/", include("factures.urls")),
-
-    
+   
     #pour la partie swagger
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0),
          name="schema-swagger-ui"),
