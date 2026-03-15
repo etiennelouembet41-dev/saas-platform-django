@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %} Detail Facture #{{invoice.id}}{% endblock  %}
+
+{% block content %}
+    <h1 class="mb-4">    Facture #{{invoice.id}}</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <p><strong>Commande: </strong> {{invoice.order.id}}</p>
+            <p><strong>Date : </strong> {{invoice.created_at|date:"d/m/Y H:i"}}</p>
+            <p><strong>Total : </strong>{{invoice.total}} €</p>
+
+        </div>
+
+    </div>
+
+
+    <h3>Produits</h3>
+
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-secondary">
+
+            <tr>
+
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Prix unitaire</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            
+            {% for item in invoice.order.items.all %}
+                
+                <tr>
+
+                    <td>{{item.product.name}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.price}} €</td>
+                    <td>{{item.get_total}} €</td>
+                </tr>
+            
+            {% empty %}
+                <tr>
+
+                    <td colspan="4" class="text-center">
+                        Aucun produit dans cette commande
+                    </td>
+                </tr>
+            {% endfor %}
+                
+        </tbody>
+
+    </table>
+
+
+
+<a href="{% url 'invoice_list' %}" class="btn btn-primary mt-3">
+    Retour à la liste
+</a>
+
+{% endblock %}
