@@ -8,7 +8,7 @@ from django.conf import settings
  
 class Invoice(models.Model):
     
-    order=models.OneToOneField(
+    order=models.OneToOneField( 
         Order,
         on_delete=models.CASCADE
     ) 
