@@ -4,6 +4,8 @@ from .serializers import ClientSerializer
 from .models import Client
 from rest_framework.permissions import IsAuthenticated
 from .forms import ClientForm
+from django.core.paginator import Paginator
+from django.db.models import Q
 # Create your views here.
 
 class ClientViewSet(viewsets.ModelViewSet):
@@ -17,18 +19,39 @@ class ClientViewSet(viewsets.ModelViewSet):
 #pour afficher la liste des clients
 def clients_list(request):
     
-    clients=Client.objects.all()
+    sort=request.GET.get("sort") #en ce qui concerne le tri
     
-    context={
-        "clients":clients
-    }
-
-    return render(
-        request,
-        "clients/clients_list.html",
-        context
+    search_query=request.GET.get("search") #en ce qui concerne la recherche
+    
+    clients=Client.objects.all() 
+    
+    if search_query:
+        clients=clients.filter(
+            Q(name__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(phone__icontains=search_query) 
+            
+        )
+    
+    if sort:
+        clients=clients.order_by(sort)
         
-    )
+    
+    paginator=Paginator(clients, 10) # 10 clients par page
+    
+    page_number=request.GET.get("page") #en ce qui concerne la pagination
+    
+    page_obj=paginator.get_page(page_number)
+    
+    context={ "clients":page_obj,
+                "search_query":search_query,
+                "sort": sort   
+            } 
+    
+    return render( 
+                  request, 
+                  "clients/clients_list.html", 
+                  context )
     
 
 #pour créer une liste

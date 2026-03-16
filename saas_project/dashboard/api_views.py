@@ -43,7 +43,7 @@ def orders_count_stats(request):
     
     return Response(data)
 
-
+#graphisme pour les produits 
 @api_view(["GET"])
 def top_products(request):
     

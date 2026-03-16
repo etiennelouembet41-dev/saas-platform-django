@@ -25,6 +25,7 @@
             <tr>
 
                 <th>Produit</th>
+                <th>Client</th>
                 <th>Quantité</th>
                 <th>Prix unitaire</th>
                 <th>Total</th>
@@ -39,6 +40,7 @@
                 <tr>
 
                     <td>{{item.product.name}}</td>
+                    <td>{{ invoice.order.client.name }}</td> <!-- NOM DU CLIENT -->
                     <td>{{item.quantity}}</td>
                     <td>{{item.price}} €</td>
                     <td>{{item.get_total}} €</td>

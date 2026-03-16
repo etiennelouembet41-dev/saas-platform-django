@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from .serializers import ProductSerializer
 from .models import Products
 from .forms import ProductsForm
+from django.core.paginator import Paginator
+from django.db.models import Q
 # Create your views here.
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -14,10 +16,30 @@ class ProductViewSet(viewsets.ModelViewSet):
 #pour voir la liste des produits
 def products_list(request):
     
+    sort=request.GET.get("sort")
+    
+    search_query=request.GET.get("search")
+    
     products=Products.objects.all()
+    
+    if search_query:
+        products=products.filter(
+            Q(name__icontains=search_query)|
+            Q(description__icontains=search_query)
+           
+        )
+    
+    if sort:
+        products=products.order_by(sort)
+    
+    paginator=Paginator(products, 10)
+
+    page_number=request.GET.get("page")
+    
+    page_obj=paginator.get_page(page_number)
 
     context={
-        "products":products
+        "products":page_obj
     }
     
     return render(

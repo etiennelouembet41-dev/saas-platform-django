@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from .models import Order
 from .serializers import OrderSerializer
 from .forms import OrderForm, OrderItemFormSetCreate,OrderItemFormSetEdit
+from django.core.paginator import Paginator
+from django.db.models import Q
 # Create your views here.
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -10,13 +12,38 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     serializer_class=OrderSerializer
 
-#pour voir les commande    
+#pour voir les commande     
 def order_list(request):
+    
+    sort=request.GET.get("sort")
+    
+    search_query=request.GET.get("search")
     
     orders=Order.objects.all()
     
+    if search_query:
+        orders=orders.filter(
+            Q(client__name__icontains=search_query)| #client__name__icontains en fonction du model qui s'appel
+            Q(items__product__name__icontains=search_query)|
+            Q(statuts__icontains=search_query) 
+            
+        ).distinct()
+    
+    if sort:
+        orders=orders.order_by(sort)
+    
+    
+    
+    paginator=Paginator(orders, 10)
+    
+    page_number=request.GET.get("page")
+    
+    page_obj=paginator.get_page(page_number)
+    
     context={
-        "orders":orders
+        "orders":page_obj,
+        "search_query":search_query,
+        "sort": sort   
     }
 
     return render(
