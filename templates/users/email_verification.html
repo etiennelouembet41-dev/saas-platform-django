@@ -1,0 +1,14 @@
+<h5>Good morning {{user.username}}</h5>
+
+<p>
+        Thank you for registering.
+
+        Please click the link below to activate your account:
+</p>
+<br>
+
+<a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">
+    Activate my account
+</a>
+
+<p>If you did not initiate this registration, ignore this email.</p>

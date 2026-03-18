@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 
+<<<<<<< HEAD
+=======
+from datetime import timedelta
+
+>>>>>>> b0952cb ( Initial commit - clean repo with existing code)
 import os
 from dotenv import load_dotenv
 
@@ -60,11 +65,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clients',
+<<<<<<< HEAD
     'commandes',
     'dashboard',
     'produits',
     'users',
     'drf_yasg',
+=======
+    'commandes.apps.CommandesConfig',
+    'dashboard',
+    'produits',
+    'users',
+    'drf_yasg', #concenrnat le swagger 
+    'factures',
+    'rest_framework', # concernant le graphisme pour l'app dashboard
+    'widget_tweaks',
+>>>>>>> b0952cb ( Initial commit - clean repo with existing code)
 ]
 
 MIDDLEWARE = [
@@ -133,7 +149,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+<<<<<<< HEAD
 STATIC_URL = 'static/'
+=======
+BASE_DIR = Path(__file__).resolve().parent.parent
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]  # si tu as un dossier static global
+>>>>>>> b0952cb ( Initial commit - clean repo with existing code)
 
 AUTH_USER_MODEL='users.User'
 
@@ -153,6 +175,28 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False                   # False si TLS
+<<<<<<< HEAD
 EMAIL_HOST_USER = 'aun85423@gmail.com'
 EMAIL_HOST_PASSWORD = 'icctjshfxxkhfzqb'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+=======
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER") #toujours bloquer
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD") #
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',  # permet cookie/session
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+>>>>>>> b0952cb ( Initial commit - clean repo with existing code)

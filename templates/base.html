@@ -1,0 +1,56 @@
+{% load static %}  <!-- très important, en haut du template -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+
+            <!-- Logo + Nom -->
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard' %}">
+                <img src="{% static 'images/Le_Vikings.png' %}" alt="Logo" width="100" height="70" class="d-inline-block align-text-top me-2">
+                SaaS_PlatForm
+            </a>
+
+            <!-- Liens à droite -->
+            <ul class="navbar-nav ms-auto d-flex flex-row">
+                <li class="nav-item mx-1">
+                    <a class="btn btn-outline-light" href="{% url 'products_list' %}">Products</a>
+                </li>
+                <li class="nav-item mx-1">
+                    <a class="btn btn-outline-light" href="{% url 'clients_list' %}">Clients</a>
+                </li>
+                <li class="nav-item mx-1">
+                    <a class="btn btn-outline-light" href="{% url 'invoice_list' %}">Factures</a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="btn btn-outline-light" href="{% url 'order_list' %}">Commandes</a>
+                </li>
+
+                <li class="nav-item mx-1">
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-light">Logout</button>
+                    </form>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="container mt-5" style="max-width: 850px;">
+    <div class="card shadow-sm rounded">
+        <div class="card-header bg-dark text-white text-center py-2">
+            <h4 class="mb-0">
+                {% if form.instance.id %}
+                    Edit an Order
+                {% else %}
+                    Add an order    
+                {% endif %}
+            </h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Form principal -->
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label"><strong>{{ field.label }}</strong></label>
+                        {{ field|add_class:"form-control form-control-sm" }}
+                        {% for error in field.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <!-- Formset -->
+                {{ formset.management_form }}
+                {% for item_form in formset %}
+                    <div class="order-item mb-3 p-2 border rounded">
+                        <!-- Champs visibles seulement -->
+                        {% for field in item_form.visible_fields %}
+                            <div class="mb-2">
+                                <label for="{{ field.id_for_label }}" class="form-label"><strong>{{ field.label }}</strong></label>
+                                {% if field.name == "product" %}
+                                    {{ field|add_class:"form-select form-select-sm product-select" }}
+                                {% else %}
+                                    {{ field|add_class:"form-control form-control-sm" }}
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+
+                        <!-- Champs cachés (id etc.) -->
+                        {% for hidden in item_form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <!-- Boutons -->
+                <div class="d-flex gap-2 mt-3">
+                    <button class="btn btn-dark flex-grow-1 btn-sm">
+                        {% if form.instance.id %}
+                            To update
+                        {% else %}
+                            Save
+                        {% endif %}
+                    </button>
+
+                    <a href="{% url 'order_list' %}" class="btn btn-secondary flex-grow-1 btn-sm">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- JS pour remplir automatiquement le prix -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const productPrices = {
+        {% for product in formset.forms.0.fields.product.queryset %}
+            "{{ product.id }}": "{{ product.price }}",
+        {% endfor %}
+    };
+
+    document.querySelectorAll('select.product-select').forEach(select => {
+        select.addEventListener('change', () => {
+            const orderItemDiv = select.closest('.order-item');
+            const priceInput = orderItemDiv.querySelector('input[name$="-price"]');
+            const productId = select.value;
+            if (priceInput && productPrices[productId]) {
+                priceInput.value = productPrices[productId];
+            }
+        });
+        select.dispatchEvent(new Event('change'));
+    });
+
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}List of Invoices{% endblock title %}
+
+{% block content %}
+
+    <h2>List of Invoices</h2>
+    <br>
+    
+    <div class="d-flex mb-3 justify-content-between align-items-center">
+
+        <!-- Formulaire de recherche -->
+        <form method="get" class="mb-3 d-flex">
+            <input type="text" name="search" 
+                placeholder="Rechercher..."
+                value="{{ request.GET.search }}" 
+                class="form-control me-2">
+            <button class="btn btn-primary">
+                Search
+            </button>
+        </form>
+
+        <!-- Boutons de tri -->
+        <div class="btn-group mb-3">
+        <!-- Tri A → Z -->
+            <a class="btn btn-outline-secondary"
+                href="?sort=order__client__name{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                Name ↑
+            </a>
+        <!-- Tri Z → A -->
+            <a class="btn btn-outline-secondary"
+                href="?sort=-order__client__name{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                Name ↓
+            </a>
+        </div>
+    </div>
+
+
+        <div class="table-responsive rounded shadow-sm border">
+
+        <table class="table table-striped mb-0">
+            <thead class="table-dark rounded-top">
+                    <tr>
+                        <th>ID</th>
+                        <th>Orders</th>
+                        <th>Image</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Date</th>
+                    </tr>
+            </thead>
+
+            <tbody>
+
+                
+                {% for invoice in page_obj  %}
+                    <tr>
+
+                        <td>
+                            <a href="{% url 'invoice_detail' invoice.id %}">{{invoice.id}}</a>
+                        </td>
+                        <td>{{invoice.order.id}}</td>
+                        <td>
+                            {% for item in invoice.order.items.all %}
+                                {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" 
+                                        alt="{{ item.product.name }}" 
+                                        width="100"  
+
+                                        class="me-2 rounded">
+                                {% else %}
+                                    No image
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{ invoice.order.client.name }}</td> <!-- NOM DU CLIENT -->
+                        <td>{{invoice.total}}</td>
+                        <td>{{invoice.created_at}}</td>
+                    </tr>
+                {% empty %}
+                    
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            Aucune facture disponible
+                        </td>
+                    </tr>
+                {% endfor %}
+                    
+            </tbody>
+
+
+        </table>
+
+        </div>
+        <br>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">
+                        Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                     <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                 </li>
+
+                 <li class="page-item">
+                      <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                 </li>
+            {% endif %}
+
+        </ul>
+    </nav>
+{% endblock %}
