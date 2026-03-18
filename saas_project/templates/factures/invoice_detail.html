@@ -65,4 +65,8 @@
     Retour à la liste
 </a>
 
+<a href="{% url 'generate_invoice_pdf' invoice.order.id %}" class="btn btn-success mt-3">
+    Télécharger la facture PDF
+</a>
+
 {% endblock %}

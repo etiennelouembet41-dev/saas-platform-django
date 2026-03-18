@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from clients.models import Client
 from produits.models import Products
+from django.core.mail import send_mail
 # Create your models here.
 
 class Order(models.Model):

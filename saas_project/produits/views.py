@@ -5,6 +5,7 @@ from .models import Products
 from .forms import ProductsForm
 from django.core.paginator import Paginator
 from django.db.models import Q
+
 # Create your views here.
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -52,12 +53,13 @@ def products_list(request):
 #pour la création de produits
 def products_create(request):
     
-    form=ProductsForm(request.POST or None)
+    form=ProductsForm(request.POST or None, request.FILES or None) # <- Ajouter request.FILES pour l'image
     
     if form.is_valid():
         products=form.save(commit=False)
         products.user=request.user
-        form.save()
+        products.save()  # <- ici, sauvegarder l'instance avec save()
+        
 
         return redirect("products_list")
     
@@ -69,7 +71,7 @@ def products_edit(request, id):
     
     products=get_object_or_404(Products, id=id)
     
-    form=ProductsForm(request.POST or None, instance=products)
+    form=ProductsForm(request.POST or None, request.FILES or None, instance=products)
 
     if form.is_valid():
         form.save()
@@ -96,3 +98,7 @@ def products_delete(request, id):
                   "produits/products_delete.html",
                   {"products":products}
                 )
+    
+    
+
+    

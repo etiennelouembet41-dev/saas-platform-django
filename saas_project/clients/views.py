@@ -6,6 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 from .forms import ClientForm
 from django.core.paginator import Paginator
 from django.db.models import Q
+import openpyxl
+from django.http import HttpResponse
+
 # Create your views here.
 
 class ClientViewSet(viewsets.ModelViewSet):
@@ -102,3 +105,24 @@ def client_delete(request, id):
                   "clients/client_delete.html",
                   {"client":client}
                 )
+    
+    
+#pour télécharger un fichier excel
+def export_clients_excel(request):
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.title = "Clients"
+
+    # En-têtes
+    sheet.append(["Name", "Email", "Phone"])
+
+    # Données clients
+    clients = Client.objects.all()
+    for client in clients:
+        sheet.append([client.name, client.email, client.phone])
+
+    # Réponse Excel
+    response = HttpResponse(content_type="application/ms-excel")
+    response["Content-Disposition"] = 'attachment; filename="clients.xlsx"'
+    workbook.save(response)
+    return response

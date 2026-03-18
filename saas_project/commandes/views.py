@@ -5,6 +5,9 @@ from .serializers import OrderSerializer
 from .forms import OrderForm, OrderItemFormSetCreate,OrderItemFormSetEdit
 from django.core.paginator import Paginator
 from django.db.models import Q
+from reportlab.pdfgen import canvas
+from django.http import HttpResponse
+from .emails import send_invoice_email
 # Create your views here.
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -68,6 +71,9 @@ def order_create(request):
             formset.save()
             
             order.calculate_total()
+            
+            if order.statuts == "paid":
+                send_invoice_email(order) #pour envoyer le mail au cas ou le statuts est paid 
         
             return redirect("order_list")
     
@@ -95,6 +101,11 @@ def order_edit(request, id):
             form.save()
             formset.save()
             order.calculate_total()
+            
+            if form.has_changed() and "statuts" in form.changed_data:
+                if form.cleaned_data["statuts"] == "paid":
+                    send_invoice_email(order)
+             
             return redirect("order_list")
     else:
         form = OrderForm(instance=order)
@@ -122,3 +133,40 @@ def order_delete(request, id):
         "commandes/order_delete.html",
         {"order":order}
     )
+    
+
+#la vue concernant le pdf
+def generate_invoice_pdf(request, order_id):
+    
+    order=Order.objects.get(id=order_id)
+
+    response=HttpResponse(content_type="application/pdf")
+
+    response["Content-Disposition"]=(
+        f'attachment; filename="invoice_{order.id}.pdf" '
+    )
+    
+    p=canvas.Canvas(response)
+
+    p.drawString(100, 800, f"Invoice #{order.id}")
+    
+    p.drawString(100, 750, f"Client : {order.client.name}")
+
+    y=700
+    
+    for item in order.items.all():
+        p.drawString(
+            100,
+            y,
+            f"{item.product.name}x{item.quantity}"
+        )
+        
+        y-=20
+        
+    p.drawString(100, y - 20, f"Total : {order.total}")    
+
+    p.showPage()
+
+    p.save()
+    
+    return response
