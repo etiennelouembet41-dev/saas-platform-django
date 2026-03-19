@@ -90,10 +90,13 @@
                             Edit
                         </a>
 
-                        <a class="btn btn-sm btn-danger" 
-                            href="{% url 'products_delete' product.id %}">
-                            Delete
-                        </a>
+                        <!-- Seulement les admins peuvent supprimer -->
+                        {% if request.user.is_staff %}
+                            <a class="btn btn-sm btn-danger" 
+                                href="{% url 'products_delete' product.id %}">
+                                Delete
+                            </a>
+                        {% endif %}
 
                     </td>
                     

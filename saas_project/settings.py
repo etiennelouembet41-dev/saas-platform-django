@@ -64,16 +64,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clients',
-    'commandes',
     'dashboard',
     'produits',
     'users',
-    'drf_yasg',
-
     'commandes.apps.CommandesConfig',
-    'dashboard',
-    'produits',
-    'users',
     'drf_yasg', #concenrnat le swagger 
     'factures',
     'rest_framework', # concernant le graphisme pour l'app dashboard

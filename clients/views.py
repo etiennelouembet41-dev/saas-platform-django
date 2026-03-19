@@ -95,7 +95,6 @@ def client_edit(request, id):
     )
 
 @login_required
-@admin_required
 #pour supprimer un client
 def client_delete(request, id):
     

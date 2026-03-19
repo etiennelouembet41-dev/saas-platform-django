@@ -126,7 +126,6 @@ def order_edit(request, id):
     
 
 @login_required
-@admin_required
 #pour supprimer un commande
 def order_delete(request, id):
     order=get_object_or_404(Order, id=id)

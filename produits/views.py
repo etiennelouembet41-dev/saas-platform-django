@@ -18,7 +18,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes=[IsAdminUser]
     
 
-login_required
+@login_required
 #pour voir la liste des produits
 def products_list(request):
     
@@ -56,7 +56,7 @@ def products_list(request):
         context
     )
    
-login_required    
+@login_required  
 #pour la création de produits
 def products_create(request):
     
@@ -72,7 +72,7 @@ def products_create(request):
     
     return render(request, "produits/products_form.html", {"form":form})
 
-login_required
+@login_required
 #pour modifier un produit
 def products_edit(request, id):
     
@@ -90,8 +90,7 @@ def products_edit(request, id):
                   {"form":form}
                 )
 
-login_required
-@admin_required
+@login_required
 #pour supprimer le produit
 def products_delete(request, id):
     
